@@ -2,6 +2,7 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+$app = app();
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -14,5 +15,12 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    die("This is forked by Foxtools");
+});
+
+$router->group(['prefix' => 'v1'], function () use ($router) {
+    $router->group(['prefix' => 'user'], function () use ($router) {
+        $router->post('/register','UsersController@register');
+
+    });
 });
