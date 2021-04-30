@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use App\Console\Commands\Module\ModuleImport;
+use App\Console\Commands\Module\ModuleList;
+use Codeex\RoleAssignment\Console\Commands\PingRolesAssignment;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +16,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        ModuleList::class,
+        ModuleImport::class,
     ];
 
     /**
