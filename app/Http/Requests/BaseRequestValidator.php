@@ -8,6 +8,6 @@ use Validator;
 
 abstract class BaseRequestValidator
 {
-
+    protected $exception = null;
     abstract public function validate(array $properties);
 }

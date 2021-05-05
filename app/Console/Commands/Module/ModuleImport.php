@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands\Module;
 
+use App\Models\User;
 use App\Services\ModulesService;
+use Codeex\RoleAssignment\Models\Resource;
 use Codeex\RoleAssignment\RoleAssignmentServiceProvider;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -56,7 +58,12 @@ class ModuleImport extends Command
             }
             die("Invalid arguments");
         }catch (\Throwable $t){
+            dd($t);
             Log::error($t);
         }
+    }
+
+    public function test(User $u){
+
     }
 }

@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Lib\CodeexInsider;
 use App\Lib\ModuleInjector;
 
 class ModulesService
@@ -21,6 +22,7 @@ class ModulesService
         if($autoMerging){
             // Start migrations and etc
             $this->mergeMigrations($vendor, $moduleName);
+            $this->runSeeders($vendor, $moduleName);
         }
     }
 
@@ -87,10 +89,18 @@ class ModulesService
 
     protected function composerDump(){
         shell_exec("composer dump-autoload");
+        sleep(10);
     }
 
     public function mergeMigrations(string $vendor, string $moduleName){
         $relativePath = "packages/{$vendor}/{$moduleName}/";
         shell_exec("php artisan migrate --path={$relativePath}src/database/migrations");
+    }
+
+    public function runSeeders(string $vendor, string $moduleName){
+        $this->composerDump();
+        $relativePath = "{$vendor}\\{$moduleName}\\Services\\Insider";
+        /** @var CodeexInsider */
+        (new $relativePath)->runSeeds();
     }
 }
