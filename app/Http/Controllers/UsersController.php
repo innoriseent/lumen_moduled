@@ -18,4 +18,9 @@ class UsersController extends Controller
         $userDetails = $userService->registerUser($data);
         return response(['data' => $userDetails, 'message' => 'Account created successfully!', 'status' => true]);
     }
+
+    public function getUser(Request $request){
+        return $request->user();
+    }
+
 }

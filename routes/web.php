@@ -20,6 +20,7 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'v1'], function () use ($router) {
     $router->group(['prefix' => 'user'], function () use ($router) {
+        $router->get('/', 'UsersController@getUser');
         $router->post('/register','UsersController@register');
 
     });
