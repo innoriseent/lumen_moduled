@@ -17,8 +17,17 @@ class ModulesService
 
         $this->prepareEnvironment($pathToVendor, $pathToModule);
         $this->cloneModule($pathToModule, $path);
-        $this->startIntegration($vendor, $moduleName, $pathToModule);
+        $additionalData = $this->startIntegration($vendor, $moduleName, $pathToModule);
         $this->composerDump();
+        /** @var ModuleInjector $injector */
+        if(!$additionalData){
+            throw new \Exception("Fatal error on module intergation related with loading/validating additional.json file of module");
+        }
+        $injector = app()->injector;
+        $injector->addModule($additionalData['provider']['alias'],
+            $additionalData['namespace'],
+            $additionalData['provider']['class']);
+
         if($autoMerging){
             // Start migrations and etc
             $this->mergeMigrations($vendor, $moduleName);
@@ -78,18 +87,14 @@ class ModulesService
             $relativePath = "packages/{$vendor}/{$moduleName}/";
             $composerData['autoload']['psr-4'][$additionalData['namespace']] = "{$relativePath}src/";
             $this->saveJson($composerJsonPath, $composerData);
-            /** @var ModuleInjector $injector */
-            $injector = app()->injector;
-            $injector->addModule($additionalData['provider']['alias'],
-                $additionalData['namespace'],
-                $additionalData['provider']['class']);
+            return $additionalData;
         }
-
+        return null;
     }
 
     protected function composerDump(){
         shell_exec("composer dump-autoload");
-        sleep(10);
+        sleep(20);
     }
 
     public function mergeMigrations(string $vendor, string $moduleName){

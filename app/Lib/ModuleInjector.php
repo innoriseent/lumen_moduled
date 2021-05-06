@@ -53,7 +53,6 @@ class ModuleInjector
     public function addModule(string $alias, string $path, string $className){
         $providerName = "{$path}{$className}";
         $this->modulesServices[$alias] = $providerName;
-        app()->register($providerName);
         $this->saveProviders();
     }
 
